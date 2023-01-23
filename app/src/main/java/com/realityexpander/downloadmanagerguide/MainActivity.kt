@@ -5,6 +5,7 @@ import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,8 +22,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 
-var downloadedUri: String? = null
-var downloadUri: MutableStateFlow<String?> = MutableStateFlow<String?>(null)
+data class DownloadResult(
+    val id: Long,
+    val uri: String?,
+)
+
+var downloadResult: MutableStateFlow<DownloadResult?> = MutableStateFlow(null)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,22 +38,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             DownloadManagerGuideTheme {
 
-                val uri = downloadUri.asStateFlow().collectAsState()
+                val downloadState = downloadResult.asStateFlow().collectAsState().value
 
-                DownloadedImage(uri.value)
+                Column {
+                    DownloadedImage(downloadState)
+
+                    Text("Download ID: ${downloadState?.id}")
+                    Text("Downloaded URI: ${downloadState?.uri ?: "No image downloaded yet"}")
+                }
             }
         }
     }
 }
 
 @Composable
-fun DownloadedImage(downloadedUri: String?) {
+fun DownloadedImage(downloadResult: DownloadResult?) {
 
-    Text(text = downloadedUri ?: "No image downloaded yet")
-
-    downloadedUri?.let { uri ->
+    downloadResult?.let { result ->
         val context = LocalContext.current
-        val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri.toUri())
+        val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, result.uri?.toUri())
+
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = "Downloaded Image",

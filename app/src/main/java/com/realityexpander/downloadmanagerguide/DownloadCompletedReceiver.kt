@@ -27,10 +27,10 @@ class DownloadCompletedReceiver: BroadcastReceiver() {
                         val columnLocalUriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
                         val uri = cursor.getString(columnLocalUriIndex)
 
-                        // do something with the file
                         println("Download completed: $uri")
-//                        downloadedUri = uri
-                        runBlocking { downloadUri.emit(uri) }
+                        runBlocking {
+                            downloadResult.emit(DownloadResult(id, uri))
+                        }
                     }
                 }
             }
