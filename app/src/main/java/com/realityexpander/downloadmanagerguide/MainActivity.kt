@@ -32,7 +32,7 @@ var downloadResult: MutableStateFlow<DownloadResult?> = MutableStateFlow(null)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val downloader = AndroidDownloader(this)
-        downloader.downloadFile("https://pl-coding.com/wp-content/uploads/2022/04/pic-squared.jpg")
+        downloader.downloadFile("https://cdn.pixabay.com/photo/2014/07/16/05/18/beach-394503_1280.jpg")
 
         super.onCreate(savedInstanceState)
         setContent {
