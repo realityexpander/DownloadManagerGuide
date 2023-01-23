@@ -16,9 +16,10 @@ class AndroidDownloader(
             .setMimeType("image/jpeg")
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setTitle("image.jpg")
+            .setTitle("Downloaded image.jpg")
             .addRequestHeader("Authorization", "Bearer <token>")
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "image.jpg")
+
         return downloadManager.enqueue(request)
     }
 }
